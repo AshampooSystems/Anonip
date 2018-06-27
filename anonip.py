@@ -97,7 +97,10 @@ def handle_ip_column(column, config):
 
     #if column contains a portnumber e.g 10.0.0.1:80 , then remove port
     if(':' in column):
-        column = column.split(':')[0]
+        suffix = ''
+        if column[-1] in [']', '|']:
+            suffix = column[-1]
+        column = column.split(':')[0] + suffix  
 
     array = list(column)
     first = 0
