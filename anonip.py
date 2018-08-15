@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python
 
 """
 anonip.py 0.5:
@@ -56,7 +56,7 @@ def read_stdin(config):
             line = sys.stdin.readline()
         except IOError as err:
             # if reading from stdin fails, exit
-            print >> sys.stderr, err
+            print(err, file=sys.stderr)
             cleanup(config)
             break
 
@@ -70,8 +70,8 @@ def read_stdin(config):
             continue
 
         if config.debug:
-            print >> sys.stderr, ("[debug] read %s, calling parse_line"
-                                  % (line.rstrip()))
+            print(("[debug] read %s, calling parse_line"
+                                  % (line.rstrip())), file=sys.stderr)
 
         # parse the line
         parsed_line = parse_line(line, config)
@@ -82,7 +82,7 @@ def read_stdin(config):
             config.output.write("%s\n" % parsed_line)
             config.output.flush()
         else:
-            print parsed_line.rstrip()
+            print(parsed_line.rstrip())
 
 
 def handle_ip_column(column, config):
@@ -304,13 +304,14 @@ def open_output_file(parser, args):
     """
     Opens the specified output file.
     """
+    output_file = None
     try:
         output_file = open(args.output, "a")
     except IOError as err:
         parser.error("%s" % err)
 
     if args.debug:
-        print >> sys.stderr, "[debug] opened output file %s" % args.output
+        print("[debug] opened output file %s" % args.output, file=sys.stderr)
 
     return output_file
 
@@ -435,7 +436,7 @@ def cleanup(config):
         config.output.close()
 
         if config.debug:
-            print >> sys.stderr, "[debug] closed output file %s" % config.output.name
+            print("[debug] closed output file %s" % config.output.name, file=sys.stderr)
 
 
 def cleanup_handler(signum, config):
@@ -443,7 +444,7 @@ def cleanup_handler(signum, config):
     This is a wrapper around cleanup(), which is used to be specified as a
     signal handler.
     """
-    print >> sys.stderr, "\ncaught signal %i, terminating..." % signum
+    print("\ncaught signal %i, terminating..." % signum, file=sys.stderr)
     cleanup(config)
     sys.exit(1)
 
